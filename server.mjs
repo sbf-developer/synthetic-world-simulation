@@ -4,7 +4,8 @@ import { extname, join, normalize, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = resolve(fileURLToPath(new URL(".", import.meta.url)));
-const port = Number(process.env.PORT || 4173);
+const cliPort = process.argv.find((argument) => argument.startsWith("--port="))?.split("=")[1];
+const port = Number(cliPort || process.env.PORT || 4173);
 const mime = {
   ".html": "text/html; charset=utf-8",
   ".js": "text/javascript; charset=utf-8",
