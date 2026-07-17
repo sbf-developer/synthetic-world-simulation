@@ -3,35 +3,32 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#101322" />
+    <meta name="theme-color" content="#0b0f14" />
     <title>Synthetic — economic sandbox</title>
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
-    <main class="app-shell">
-      <header class="topbar">
+    <div class="game-shell">
+      <header class="game-topbar">
         <div class="brand-lockup">
           <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
           <div>
-            <div class="eyebrow">Agent-based economic sandbox</div>
-            <h1>Synthetic</h1>
+            <div class="eyebrow">SIMULATION / 01</div>
+            <h1>SYNTHETIC</h1>
           </div>
         </div>
-        <div class="topbar-actions">
-          <div class="phase-pill"><span class="pulse-dot"></span><span id="phase-label">Stable</span></div>
-          <button id="run-toggle" class="button button-primary" type="button">Run simulation</button>
-        </div>
-      </header>
 
-      <section class="hero-row">
-        <div>
-          <p class="kicker">A living economic world</p>
-          <h2>Change the rules.<br /><em>Watch the system respond.</em></h2>
-          <p class="hero-copy">Synthetic models households, firms, government, housing and markets as a connected system. Each tick is one month of simulated life.</p>
+        <div class="world-status" aria-live="polite">
+          <span class="status-dot"></span>
+          <span id="phase-label">Stable</span>
+          <span class="status-separator">/</span>
+          <span>SEED 42</span>
         </div>
-        <div class="hero-controls">
-          <button id="step-button" class="button button-secondary" type="button">Step one month</button>
-          <button id="shock-button" class="button button-secondary button-alert" type="button">Inject demand shock</button>
+
+        <div class="topbar-actions">
+          <span id="stat-month" class="turn-readout">Month 0</span>
+          <button id="step-button" class="button button-quiet" type="button">Step</button>
+          <button id="shock-button" class="button button-warning" type="button">Demand shock</button>
           <label class="speed-control" for="speed-select">Speed
             <select id="speed-select" class="select compact-select">
               <option value="1">1×</option>
@@ -40,116 +37,129 @@
               <option value="8">8×</option>
             </select>
           </label>
+          <button id="run-toggle" class="button button-primary" type="button">Run simulation</button>
         </div>
-      </section>
+      </header>
 
-      <section class="metric-grid" aria-label="Current economic indicators">
-        <article class="metric-card metric-card-accent">
-          <div class="metric-label">Simulated time</div>
-          <div id="stat-month" class="metric-value">Month 0</div>
-          <div class="metric-note">One tick = one month</div>
-        </article>
-        <article class="metric-card">
-          <div class="metric-label">Monthly output</div>
-          <div id="stat-gdp" class="metric-value">$0</div>
-          <div class="metric-note">Household purchases cleared</div>
-        </article>
-        <article class="metric-card">
-          <div class="metric-label">Unemployment</div>
-          <div id="stat-unemployment" class="metric-value">0.0%</div>
-          <div id="stat-unemployment-note" class="metric-note">Labor market active</div>
-        </article>
-        <article class="metric-card">
-          <div class="metric-label">Public trust</div>
-          <div id="stat-trust" class="metric-value">0%</div>
-          <div id="stat-trust-note" class="metric-note">Model sentiment index</div>
-        </article>
-      </section>
-
-      <section class="workspace-grid">
-        <article class="panel world-panel">
-          <div class="panel-heading">
-            <div>
-              <div class="eyebrow">Live world view</div>
-              <h3>Citizens, firms &amp; neighborhoods</h3>
+      <main>
+        <section class="game-grid">
+          <section class="panel map-panel">
+            <div class="section-heading">
+              <div>
+                <div class="eyebrow">WORLD / MACRO VIEW</div>
+                <h2>ALDER CITY <span class="live-marker" aria-label="live"></span></h2>
+              </div>
+              <div class="world-meta"><span id="map-districts-count">12 districts</span><span id="map-households-count">620 households</span><span id="map-firms-count">64 firms</span></div>
             </div>
-            <div class="map-note"><span class="legend-dot employed-dot"></span> employed <span class="legend-dot unemployed-dot"></span> unemployed</div>
-          </div>
-          <div class="world-stage">
-            <canvas id="world-canvas" role="img" aria-label="Live map of economic agents and firms"></canvas>
-            <div class="map-overlay top-left"><span class="overlay-label">Population</span><strong id="map-population">620</strong></div>
-            <div class="map-overlay top-right"><span class="overlay-label">Housing units</span><strong id="map-housing">635</strong></div>
-          </div>
-          <div class="map-footer">
-            <div id="district-inspector" class="district-inspector"><strong>City view</strong><span>Click a neighborhood to inspect local conditions.</span></div>
-            <div class="sector-legend" id="sector-legend"></div>
-          </div>
-        </article>
 
-        <aside class="panel policy-panel">
-          <div class="panel-heading">
-            <div>
-              <div class="eyebrow">Policy lab</div>
-              <h3>Change the conditions</h3>
+            <div class="world-stage">
+              <canvas id="world-canvas" role="img" aria-label="Live map of citizens, firms, and economic districts"></canvas>
+              <div class="map-overlay top-left"><span class="overlay-label">Population</span><strong id="map-population">620</strong></div>
+              <div class="map-overlay top-right"><span class="overlay-label">Housing units</span><strong id="map-housing">635</strong></div>
+              <div class="map-overlay bottom-left"><span class="overlay-label">Click a district</span><strong>Inspect local economy</strong></div>
             </div>
-            <span class="model-tag">reset to apply</span>
-          </div>
-          <div class="policy-controls">
-            <label class="range-row" for="population-input"><span><b>Population</b><small>households in the city</small></span><output id="population-output">620</output></label>
-            <input id="population-input" class="range" type="range" min="200" max="1200" step="20" value="620" />
 
-            <label class="range-row" for="wage-floor-input"><span><b>Wage floor</b><small>minimum monthly wage</small></span><output id="wage-floor-output">$2,050</output></label>
-            <input id="wage-floor-input" class="range" type="range" min="1200" max="3400" step="50" value="2050" />
-
-            <label class="range-row" for="tax-input"><span><b>Income tax</b><small>labor income share</small></span><output id="tax-output">18%</output></label>
-            <input id="tax-input" class="range" type="range" min="0" max="45" step="1" value="18" />
-
-            <label class="range-row" for="benefit-input"><span><b>Unemployment benefit</b><small>share of median wage</small></span><output id="benefit-output">55%</output></label>
-            <input id="benefit-input" class="range" type="range" min="0" max="90" step="1" value="55" />
-
-            <label class="range-row" for="housing-input"><span><b>Construction</b><small>new housing units / month</small></span><output id="housing-output">5</output></label>
-            <input id="housing-input" class="range" type="range" min="0" max="40" step="1" value="5" />
-
-            <label class="range-row" for="rate-input"><span><b>Base interest rate</b><small>annual borrowing cost</small></span><output id="rate-output">3.5%</output></label>
-            <input id="rate-input" class="range" type="range" min="0" max="12" step="0.5" value="3.5" />
-          </div>
-          <button id="apply-policy" class="button button-primary button-block" type="button">Apply policy mix &amp; reset</button>
-          <div class="scenario-block">
-            <div class="eyebrow">Start an experiment</div>
-            <div class="scenario-grid">
-              <button class="scenario-button active" type="button" data-scenario="baseline">Baseline</button>
-              <button class="scenario-button" type="button" data-scenario="recession">Recession</button>
-              <button class="scenario-button" type="button" data-scenario="rentSqueeze">Rent squeeze</button>
-              <button class="scenario-button" type="button" data-scenario="automation">Automation</button>
+            <div class="map-footer">
+              <div id="district-inspector" class="district-inspector"><strong>City view</strong><span>Click a neighborhood to inspect local conditions.</span></div>
+              <div class="legend-row">
+                <span class="legend-item"><i class="legend-dot employed-dot"></i> employed</span>
+                <span class="legend-item"><i class="legend-dot unemployed-dot"></i> unemployed</span>
+                <span id="sector-legend" class="sector-legend"></span>
+              </div>
             </div>
-          </div>
-        </aside>
-      </section>
+          </section>
 
-      <section class="analysis-grid">
-        <article class="panel chart-panel chart-wide">
-          <div class="chart-heading"><div><div class="eyebrow">Output</div><h3>Economic activity</h3></div><span class="chart-unit">monthly GDP</span></div>
-          <svg id="gdp-chart" class="chart" role="img" aria-label="Monthly economic output chart" viewBox="0 0 640 180"></svg>
-        </article>
-        <article class="panel chart-panel">
-          <div class="chart-heading"><div><div class="eyebrow">Labor</div><h3>Unemployment</h3></div><span class="chart-unit">share of workforce</span></div>
-          <svg id="unemployment-chart" class="chart" role="img" aria-label="Unemployment chart" viewBox="0 0 420 180"></svg>
-        </article>
-        <article class="panel chart-panel">
-          <div class="chart-heading"><div><div class="eyebrow">Households</div><h3>Housing burden</h3></div><span class="chart-unit">rent / income</span></div>
-          <svg id="rent-chart" class="chart" role="img" aria-label="Housing burden chart" viewBox="0 0 420 180"></svg>
-        </article>
-        <article class="panel event-panel">
-          <div class="chart-heading"><div><div class="eyebrow">System log</div><h3>What just happened</h3></div><span class="chart-unit">latest tick</span></div>
-          <div id="event-feed" class="event-feed" aria-live="polite"></div>
-        </article>
-      </section>
+          <aside class="panel control-panel">
+            <div class="section-heading control-heading">
+              <div>
+                <div class="eyebrow">CONTROL ROOM</div>
+                <h2>Policy</h2>
+              </div>
+              <span class="model-tag">RESET TO APPLY</span>
+            </div>
+
+            <div class="hud-grid" aria-label="Current economy">
+              <article class="hud-stat">
+                <div class="metric-label">Output</div>
+                <div id="stat-gdp" class="metric-value">$0</div>
+                <div class="metric-note">monthly GDP</div>
+              </article>
+              <article class="hud-stat">
+                <div class="metric-label">Unemployment</div>
+                <div id="stat-unemployment" class="metric-value">0.0%</div>
+                <div id="stat-unemployment-note" class="metric-note">labor market</div>
+              </article>
+              <article class="hud-stat">
+                <div class="metric-label">Public trust</div>
+                <div id="stat-trust" class="metric-value">0%</div>
+                <div id="stat-trust-note" class="metric-note">sentiment index</div>
+              </article>
+              <article class="hud-stat">
+                <div class="metric-label">Rent burden</div>
+                <div id="rent-burden-readout" class="metric-value">—</div>
+                <div class="metric-note">housing / income</div>
+              </article>
+            </div>
+
+            <div class="policy-controls">
+              <label class="range-row" for="population-input"><span><b>Population</b><small>households in the city</small></span><output id="population-output">620</output></label>
+              <input id="population-input" class="range" type="range" min="200" max="1200" step="20" value="620" />
+
+              <label class="range-row" for="wage-floor-input"><span><b>Wage floor</b><small>minimum monthly wage</small></span><output id="wage-floor-output">$2,050</output></label>
+              <input id="wage-floor-input" class="range" type="range" min="1200" max="3400" step="50" value="2050" />
+
+              <label class="range-row" for="tax-input"><span><b>Income tax</b><small>labor income share</small></span><output id="tax-output">18%</output></label>
+              <input id="tax-input" class="range" type="range" min="0" max="45" step="1" value="18" />
+
+              <label class="range-row" for="benefit-input"><span><b>Unemployment benefit</b><small>share of median wage</small></span><output id="benefit-output">55%</output></label>
+              <input id="benefit-input" class="range" type="range" min="0" max="90" step="1" value="55" />
+
+              <label class="range-row" for="housing-input"><span><b>Construction</b><small>new units / month</small></span><output id="housing-output">5</output></label>
+              <input id="housing-input" class="range" type="range" min="0" max="40" step="1" value="5" />
+
+              <label class="range-row" for="rate-input"><span><b>Base interest rate</b><small>annual borrowing cost</small></span><output id="rate-output">3.5%</output></label>
+              <input id="rate-input" class="range" type="range" min="0" max="12" step="0.5" value="3.5" />
+            </div>
+
+            <button id="apply-policy" class="button button-primary button-block" type="button">Apply policy mix &amp; reset</button>
+
+            <div class="scenario-block">
+              <div class="eyebrow">SCENARIO</div>
+              <div class="scenario-grid">
+                <button class="scenario-button active" type="button" data-scenario="baseline">Baseline</button>
+                <button class="scenario-button" type="button" data-scenario="recession">Recession</button>
+                <button class="scenario-button" type="button" data-scenario="rentSqueeze">Rent squeeze</button>
+                <button class="scenario-button" type="button" data-scenario="automation">Automation</button>
+              </div>
+            </div>
+          </aside>
+        </section>
+
+        <section class="analytics-grid">
+          <article class="panel chart-panel chart-wide">
+            <div class="chart-heading"><div><div class="eyebrow">OUTPUT</div><h3>Economic activity</h3></div><span class="chart-unit">monthly GDP</span></div>
+            <svg id="gdp-chart" class="chart" role="img" aria-label="Monthly economic output chart" viewBox="0 0 640 180"></svg>
+          </article>
+          <article class="panel chart-panel">
+            <div class="chart-heading"><div><div class="eyebrow">LABOR</div><h3>Unemployment</h3></div><span class="chart-unit">workforce share</span></div>
+            <svg id="unemployment-chart" class="chart" role="img" aria-label="Unemployment chart" viewBox="0 0 420 180"></svg>
+          </article>
+          <article class="panel chart-panel">
+            <div class="chart-heading"><div><div class="eyebrow">HOUSEHOLDS</div><h3>Housing burden</h3></div><span class="chart-unit">rent / income</span></div>
+            <svg id="rent-chart" class="chart" role="img" aria-label="Housing burden chart" viewBox="0 0 420 180"></svg>
+          </article>
+          <article class="panel event-panel">
+            <div class="chart-heading"><div><div class="eyebrow">EVENT LOG</div><h3>System activity</h3></div><span class="chart-unit">latest tick</span></div>
+            <div id="event-feed" class="event-feed" aria-live="polite"></div>
+          </article>
+        </section>
+      </main>
 
       <footer class="footer-note">
-        <span><strong>Synthetic / 0.1</strong> · deterministic seed 42</span>
-        <span>Model scope: households · firms · labor · goods · housing · government</span>
+        <span><strong>SYNTHETIC / 0.1</strong> · deterministic run · seed 42</span>
+        <span>households / firms / labor / goods / housing / government</span>
       </footer>
-    </main>
+    </div>
     <script type="module" src="/src/app.js"></script>
   </body>
 </html>

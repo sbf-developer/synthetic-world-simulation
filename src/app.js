@@ -58,8 +58,11 @@ function renderMetrics() {
   $("#stat-unemployment-note").textContent = `${latest.employed.toLocaleString()} employed citizens`;
   $("#stat-trust").textContent = percent(latest.trust, 0);
   $("#stat-trust-note").textContent = `${percent(latest.wellbeing, 0)} average wellbeing`;
+  $("#rent-burden-readout").textContent = percent(latest.rentBurden);
   $("#map-population").textContent = latest.population.toLocaleString();
   $("#map-housing").textContent = latest.housingUnits.toLocaleString();
+  $("#map-households-count").textContent = `${latest.population.toLocaleString()} households`;
+  $("#map-firms-count").textContent = `${latest.firms.toLocaleString()} firms`;
 }
 
 function renderLegend() {
